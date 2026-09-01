@@ -40,49 +40,102 @@ class tree {
     return false;
   }
   insert(num) {
-    // go down each side of node add node value to array
-    // add num to array
-    //sort array
-    //call build again
+    let current = this.root;
+    let insertee = new node();
+    insertee.value = num;
+
+    while (true) {
+      if (this.root === null) {
+        this.root = insertee;
+        return;
+      }
+      if (current.value === insertee.value) return;
+      if (current === null) return false;
+      if (insertee.value > current.value) {
+        if (current.rightChild === null) {
+          current.rightChild = insertee;
+          return;
+        }
+
+        current = current.rightChild;
+      } else {
+        if (current.leftChild === null) {
+          current.leftChild = insertee;
+          return;
+        }
+        current = current.leftChild;
+      }
+    }
   }
 
   deleteItem(value) {
     let current = this.root;
     let previous;
+    let next;
     while (true) {
       if (current === null) return;
       if (current.value === value) {
         if (typeof previous === "undefined") {
-          return "Not yet."
+          return "Not yet.";
+        }
+        if (current.rightChild === null && current.leftChild === null) {
+          if (current.value > previous.value) {
+            previous.rightChild = null;
+            return;
+          } else {
+            previous.leftChild = null;
+            return;
+          }
         }
         if (current.rightChild === null) {
           if (current.value > previous.value) {
             previous.rightChild = current.leftChild;
-          }
-          if (current.value < previous.value) {
+            return;
+          } else {
             previous.leftChild = current.leftChild;
+            return;
           }
         }
         if (current.leftChild === null) {
           if (current.value > previous.value) {
             previous.rightChild = current.rightChild;
-          }
-          if (current.value < previous.value) {
+            return;
+          } else {
             previous.leftChild = current.rightChild;
+            return;
           }
         }
-        if (current.rightChild !== null && current.leftChild !== null) {
-          if (current.value > previous.value) {
-            current.rightChild.leftChild = current.leftChild;
-            previous.rightChild = current.rightChild;
+        if (current.value > previous.value) {
+          next = current.rightChild;
+          if (next.leftChild === null && next.rightChild === null) {
+            previous.rightChild = next;
           }
-          if (current.value < previous.value) {
-            current.rightChild.leftChild = current.leftChild;
-            previous.leftChild = current.rightChild;
+          if (next.leftChild === null) {
+            previous.rightChild = next;
+            next.leftChild = current.leftChild;
+          }
+          if (current.leftChild.value > next.leftChild.value) {
+            next.rightChild = current.leftChild;
+            previous.rightChild = next;
+          } else {
+            next = next.leftChild;
+          }
+        } else {
+          next = current.rightChild;
+          if (next.leftChild === null && next.rightChild === null) {
+            previous.leftChild = next;
+          }
+          if (next.leftChild === null) {
+            previous.leftChild = next;
+            next.leftChild = current.leftChild;
+          }
+          if (current.leftChild.value > next.leftChild.value) {
+            next.rightChild = current.leftChild;
+            previous.leftChild = next;
+          } else {
+            next = next.leftChild;
           }
         }
-
-        return;
       }
       if (value < current.value) {
         previous = current;
@@ -118,13 +171,21 @@ const thang = new tree([9, 4, 9, 1, 2, 6, 8, 2, 4, 6]);
 
 thang.prettyPrint();
 console.log(thang.includes(9));
-console.log(thang.deleteItem(9));
-console.log(thang.deleteItem(2));
+thang.deleteItem(9);
+thang.deleteItem(2);
+thang.prettyPrint();
 console.log(thang.includes(0));
 console.log(thang.includes(7));
 console.log(thang.includes(1));
 console.log(thang.includes(11));
 console.log(thang.includes(9));
+thang.insert(5);
+thang.insert(7);
+thang.insert(9);
+thang.insert(10);
+thang.insert(11);
+thang.deleteItem(8);
+thang.deleteItem(9);
 thang.prettyPrint();
 
 //first, get the arr during creationg of the tree
