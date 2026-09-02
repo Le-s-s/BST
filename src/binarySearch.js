@@ -68,84 +68,152 @@ class tree {
     }
   }
 
-  deleteItem(value) {
-    let current = this.root;
-    let previous;
-    let next;
-    while (true) {
-      if (current === null) return;
-      if (current.value === value) {
-        if (typeof previous === "undefined") {
-          return "Not yet.";
-        }
-        if (current.rightChild === null && current.leftChild === null) {
-          if (current.value > previous.value) {
-            previous.rightChild = null;
-            return;
-          } else {
-            previous.leftChild = null;
-            return;
-          }
-        }
-        if (current.rightChild === null) {
-          if (current.value > previous.value) {
-            previous.rightChild = current.leftChild;
-            return;
-          } else {
-            previous.leftChild = current.leftChild;
-            return;
-          }
-        }
-        if (current.leftChild === null) {
-          if (current.value > previous.value) {
-            previous.rightChild = current.rightChild;
-            return;
-          } else {
-            previous.leftChild = current.rightChild;
-            return;
-          }
-        }
-        if (current.value > previous.value) {
-          next = current.rightChild;
-          if (next.leftChild === null && next.rightChild === null) {
-            previous.rightChild = next;
-          }
-          if (next.leftChild === null) {
-            previous.rightChild = next;
-            next.leftChild = current.leftChild;
-          }
-          if (current.leftChild.value > next.leftChild.value) {
-            next.rightChild = current.leftChild;
-            previous.rightChild = next;
-          } else {
-            next = next.leftChild;
-          }
-        } else {
-          next = current.rightChild;
-          if (next.leftChild === null && next.rightChild === null) {
-            previous.leftChild = next;
-          }
-          if (next.leftChild === null) {
-            previous.leftChild = next;
-            next.leftChild = current.leftChild;
-          }
-          if (current.leftChild.value > next.leftChild.value) {
-            next.rightChild = current.leftChild;
-            previous.leftChild = next;
-          } else {
-            next = next.leftChild;
-          }
-        }
-      }
-      if (value < current.value) {
-        previous = current;
-        current = current.leftChild;
-      } else {
-        previous = current;
-        current = current.rightChild;
-      }
+  deleteItem(value, node = this.root) {
+    if (node === null) {
+      return node;
     }
-    return false;
+    if (node.value > value) {
+      node.leftChild = this.deleteItem(value, node.leftChild);
+    } else if (node.value < value) {
+      node.rightChild = this.deleteItem(value, node.rightChild);
+    } else {
+      if (node.leftChild === null) {
+        return node.rightChild;
+      }
+      if (node.rightChild === null) {
+        return node.leftChild;
+      }
+      let next;
+      next = node.rightChild;
+      while (next !== null && next.leftChild !== null) {
+        next = next.leftChild;
+      }
+      const curr = next;
+
+      node.value = curr.value;
+      node.rightChild = this.deleteItem(curr.value, node.rightChild);
+    }
+    return node;
+    // let current = this.root;
+    // let previous;
+    // let next;
+    // while (true) {
+    //   if (current === null) return;
+    //   if (current.value === value) {
+    //     if (typeof previous === "undefined") {
+    //       return "Not yet.";
+    //     }
+    //     if (current.rightChild === null && current.leftChild === null) {
+    //       if (current.value > previous.value) {
+    //         previous.rightChild = null;
+    //         return;
+    //       } else {
+    //         previous.leftChild = null;
+    //         return;
+    //       }
+    //     }
+    //     if (current.rightChild === null) {
+    //       if (current.value > previous.value) {
+    //         previous.rightChild = current.leftChild;
+    //         return;
+    //       } else {
+    //         previous.leftChild = current.leftChild;
+    //         return;
+    //       }
+    //     }
+    //     if (current.leftChild === null) {
+    //       if (current.value > previous.value) {
+    //         previous.rightChild = current.rightChild;
+    //         return;
+    //       } else {
+    //         previous.leftChild = current.rightChild;
+    //         return;
+    //       }
+    //     }
+    //     if (current.value > previous.value) {
+    //       next = current.rightChild;
+    //       if (next.leftChild === null && next.rightChild === null) {
+    //         previous.rightChild = next;
+    //       }
+    //       if (next.leftChild === null) {
+    //         previous.rightChild = next;
+    //         next.leftChild = current.leftChild;
+    //       }
+    //       if (current.leftChild.value > next.leftChild.value) {
+    //         next.rightChild = current.leftChild;
+    //         previous.rightChild = next;
+    //       } else {
+    //         next = next.leftChild;
+    //       }
+    //     } else {
+    //       next = current.rightChild;
+    //       if (next.leftChild === null && next.rightChild === null) {
+    //         previous.leftChild = next;
+    //       }
+    //       if (next.leftChild === null) {
+    //         previous.leftChild = next;
+    //         next.leftChild = current.leftChild;
+    //       }
+    //       if (current.leftChild.value > next.leftChild.value) {
+    //         next.rightChild = current.leftChild;
+    //         previous.leftChild = next;
+    //       } else {
+    //         next = next.leftChild;
+    //       }
+    //     }
+    //   }
+    //   if (value < current.value) {
+    //     previous = current;
+    //     current = current.leftChild;
+    //   } else {
+    //     previous = current;
+    //     current = current.rightChild;
+    //   }
+    // }
+    // return false;
+  }
+
+  preOrderForEach(node = this.root) {
+    let current = node;
+    if (node === null) return;
+    if (current.rightChild === null) {
+      console.log(node.value);
+      this.preOrderForEach(node.leftChild);
+    } else if (current.leftChild === null) {
+      console.log(node.value);
+      this.preOrderForEach(node.rightChild);
+    } else {
+      console.log(node.value);
+      this.preOrderForEach(current.leftChild);
+      this.preOrderForEach(current.rightChild);
+    }
+  }
+  postOrderForEach(node = this.root) {
+    let current = node;
+    if (node === null) return;
+    if (current.leftChild === null) {
+      console.log(node.value);
+      this.postOrderForEach(node.rightChild);
+    } else if (current.rightChild === null) {
+      console.log(node.value);
+      this.postOrderForEach(node.leftChild);
+    } else {
+      console.log(node.value);
+      this.postOrderForEach(current.rightChild);
+      this.postOrderForEach(current.leftChild);
+    }
+  }
+  levelOrderForEach(node = this.root,arr = []) {
+    if (node === null) {
+      return;
+    }
+    let current = node
+    while (true){
+      
+      
+
+
+    }
   }
   prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
     let current = node;
@@ -171,8 +239,7 @@ const thang = new tree([9, 4, 9, 1, 2, 6, 8, 2, 4, 6]);
 
 thang.prettyPrint();
 console.log(thang.includes(9));
-thang.deleteItem(9);
-thang.deleteItem(2);
+
 thang.prettyPrint();
 console.log(thang.includes(0));
 console.log(thang.includes(7));
@@ -184,9 +251,14 @@ thang.insert(7);
 thang.insert(9);
 thang.insert(10);
 thang.insert(11);
+thang.deleteItem(4);
+thang.deleteItem(2);
 thang.deleteItem(8);
 thang.deleteItem(9);
 thang.prettyPrint();
+thang.preOrderForEach();
+thang.postOrderForEach();
+thang.levelOrderForEach();
 
 //first, get the arr during creationg of the tree
 // instantly run through buildtree
