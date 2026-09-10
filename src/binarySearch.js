@@ -174,46 +174,49 @@ class tree {
   }
 
   preOrderForEach(node = this.root) {
-    let current = node;
     if (node === null) return;
-    if (current.rightChild === null) {
-      console.log(node.value);
-      this.preOrderForEach(node.leftChild);
-    } else if (current.leftChild === null) {
-      console.log(node.value);
-      this.preOrderForEach(node.rightChild);
-    } else {
-      console.log(node.value);
-      this.preOrderForEach(current.leftChild);
-      this.preOrderForEach(current.rightChild);
-    }
+
+    console.log(node.value);
+    this.preOrderForEach(node.leftChild);
+    this.preOrderForEach(node.rightChild);
   }
   postOrderForEach(node = this.root) {
-    let current = node;
     if (node === null) return;
-    if (current.leftChild === null) {
-      console.log(node.value);
-      this.postOrderForEach(node.rightChild);
-    } else if (current.rightChild === null) {
-      console.log(node.value);
-      this.postOrderForEach(node.leftChild);
-    } else {
-      console.log(node.value);
-      this.postOrderForEach(current.rightChild);
-      this.postOrderForEach(current.leftChild);
-    }
+
+    this.postOrderForEach(node.leftChild);
+    this.postOrderForEach(node.rightChild);
+    console.log(node.value);
   }
-  levelOrderForEach(node = this.root,arr = []) {
-    if (node === null) {
+  inOrderForEach(node = this.root) {
+    if (node === null) return;
+
+    this.inOrderForEach(node.leftChild);
+    console.log(node.value);
+    this.inOrderForEach(node.rightChild);
+  }
+  levelOrderForEach() {
+    let rNode = this.root;
+    let arr = [];
+    if (rNode === null) {
       return;
     }
-    let current = node
-    while (true){
-      
-      
+    arr.push(rNode);
+    while (arr.length > 0) {
+      if (arr[0].leftChild !== null) {
+        arr.push(arr[0].leftChild);
+      }
+      if (arr[0].rightChild !== null) {
+        arr.push(arr[0].rightChild);
+      }
+      console.log(arr[0].value);
 
-
+      arr.shift();
     }
+    // add node to array
+    // add node children to array
+    // print node value
+    // remove node
+    //repeat
   }
   prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
     let current = node;
@@ -256,9 +259,10 @@ thang.deleteItem(2);
 thang.deleteItem(8);
 thang.deleteItem(9);
 thang.prettyPrint();
-thang.preOrderForEach();
+//thang.preOrderForEach();
 thang.postOrderForEach();
-thang.levelOrderForEach();
+//thang.inOrderForEach();
+//thang.levelOrderForEach();
 
 //first, get the arr during creationg of the tree
 // instantly run through buildtree
