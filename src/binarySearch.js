@@ -94,83 +94,60 @@ class tree {
       node.rightChild = this.deleteItem(curr.value, node.rightChild);
     }
     return node;
-    // let current = this.root;
-    // let previous;
-    // let next;
-    // while (true) {
-    //   if (current === null) return;
-    //   if (current.value === value) {
-    //     if (typeof previous === "undefined") {
-    //       return "Not yet.";
-    //     }
-    //     if (current.rightChild === null && current.leftChild === null) {
-    //       if (current.value > previous.value) {
-    //         previous.rightChild = null;
-    //         return;
-    //       } else {
-    //         previous.leftChild = null;
-    //         return;
-    //       }
-    //     }
-    //     if (current.rightChild === null) {
-    //       if (current.value > previous.value) {
-    //         previous.rightChild = current.leftChild;
-    //         return;
-    //       } else {
-    //         previous.leftChild = current.leftChild;
-    //         return;
-    //       }
-    //     }
-    //     if (current.leftChild === null) {
-    //       if (current.value > previous.value) {
-    //         previous.rightChild = current.rightChild;
-    //         return;
-    //       } else {
-    //         previous.leftChild = current.rightChild;
-    //         return;
-    //       }
-    //     }
-    //     if (current.value > previous.value) {
-    //       next = current.rightChild;
-    //       if (next.leftChild === null && next.rightChild === null) {
-    //         previous.rightChild = next;
-    //       }
-    //       if (next.leftChild === null) {
-    //         previous.rightChild = next;
-    //         next.leftChild = current.leftChild;
-    //       }
-    //       if (current.leftChild.value > next.leftChild.value) {
-    //         next.rightChild = current.leftChild;
-    //         previous.rightChild = next;
-    //       } else {
-    //         next = next.leftChild;
-    //       }
-    //     } else {
-    //       next = current.rightChild;
-    //       if (next.leftChild === null && next.rightChild === null) {
-    //         previous.leftChild = next;
-    //       }
-    //       if (next.leftChild === null) {
-    //         previous.leftChild = next;
-    //         next.leftChild = current.leftChild;
-    //       }
-    //       if (current.leftChild.value > next.leftChild.value) {
-    //         next.rightChild = current.leftChild;
-    //         previous.leftChild = next;
-    //       } else {
-    //         next = next.leftChild;
-    //       }
-    //     }
-    //   }
-    //   if (value < current.value) {
-    //     previous = current;
-    //     current = current.leftChild;
-    //   } else {
-    //     previous = current;
-    //     current = current.rightChild;
-    //   }
-    // }
-    // return false;
+  }
+
+  depth(value) {
+    // traverse each side of the root node until value is found. counting each time
+    let depth = 1;
+    let current = this.root;
+    while (current !== null) {
+      if (current.value === value) {
+        return depth;
+      }
+      if (value < current.value) {
+        depth++;
+        current = current.leftChild;
+      } else {
+        depth++;
+        current = current.rightChild;
+      }
+    }
+    return depth;
+  }
+  nodeHeight(node) {
+    if (node === null) {
+      return -1;
+    }
+    let left = this.nodeHeight(node.leftChild);
+    let right = this.nodeHeight(node.rightChild);
+
+    return 1 + Math.max(right, left);
+  }
+  height(value = 0, node = this.root, height = 0) {
+    if (node === null) return;
+    // traverse each side of the root node until value is found. counting each time
+
+    let current = node;
+    while (current !== null)
+      if (current.value === value) {
+        return this.nodeHeight(current);
+        if (current.leftChild !== null) {
+        }
+        if (current.rightChild !== null) {
+        }
+      }
+
+    if (value < current.value) {
+      return this.height(value, current.leftChild, height);
+    } else {
+      return this.height(value, current.rightChild, height);
+    }
+    return null;
+  }
+  isBalanced(node = this.root) {
+    let current = node;
+    let left = this.isBalanced(current.leftChild);
+    let right = this.isBalanced(current.rightChild);
   }
 
   preOrderForEach(node = this.root) {
@@ -254,15 +231,18 @@ thang.insert(7);
 thang.insert(9);
 thang.insert(10);
 thang.insert(11);
+thang.insert(12);
 thang.deleteItem(4);
 thang.deleteItem(2);
 thang.deleteItem(8);
 thang.deleteItem(9);
 thang.prettyPrint();
 //thang.preOrderForEach();
-thang.postOrderForEach();
+//thang.postOrderForEach();
 //thang.inOrderForEach();
 //thang.levelOrderForEach();
+console.log(thang.height(6));
+//console.log(thang.depth(10));
 
 //first, get the arr during creationg of the tree
 // instantly run through buildtree
