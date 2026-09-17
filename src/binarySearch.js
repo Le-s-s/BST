@@ -50,7 +50,6 @@ class tree {
         return;
       }
       if (current.value === insertee.value) return;
-      if (current === null) return false;
       if (insertee.value > current.value) {
         if (current.rightChild === null) {
           current.rightChild = insertee;
@@ -98,7 +97,7 @@ class tree {
 
   depth(value) {
     // traverse each side of the root node until value is found. counting each time
-    let depth = 1;
+    let depth = 0;
     let current = this.root;
     while (current !== null) {
       if (current.value === value) {
@@ -112,7 +111,7 @@ class tree {
         current = current.rightChild;
       }
     }
-    return depth;
+    return null
   }
   nodeHeight(node) {
     if (node === null) {
@@ -123,25 +122,21 @@ class tree {
 
     return 1 + Math.max(right, left);
   }
-  height(value = 0, node = this.root, height = 0) {
-    if (node === null) return;
-    // traverse each side of the root node until value is found. counting each time
+  height(value) {
+    let current = this.root;
 
-    let current = node;
-    while (current !== null)
+    while (current !== null) {
       if (current.value === value) {
         return this.nodeHeight(current);
-        if (current.leftChild !== null) {
-        }
-        if (current.rightChild !== null) {
-        }
       }
 
-    if (value < current.value) {
-      return this.height(value, current.leftChild, height);
-    } else {
-      return this.height(value, current.rightChild, height);
+      if (value < current.value) {
+        current = current.leftChild;
+      } else {
+        current = current.rightChild;
+      }
     }
+
     return null;
   }
 
@@ -249,45 +244,43 @@ class tree {
   }
 }
 
-const thang = new tree([
-  9, 4, 9, 1, 2, 6, 8, 2, 4, 6, 1, 5, 2, 6, 7, 8, 2, 35, 235195, 19,
-]);
+function treeGen() {
+  let insert = [];
 
-thang.prettyPrint();
-console.log(thang.includes(9));
+  let bstSize = Math.floor(Math.random() * 100);
+  for (let i = 0; i < bstSize; i++) {
+    insert.push(Math.floor(Math.random() * 100));
+  }
+  return insert;
+}
+function testBst() {
+  const thang = new tree(treeGen());
+  console.log(thang.isBalanced());
+  thang.levelOrderForEach();
+  thang.preOrderForEach();
+  thang.postOrderForEach();
+  thang.inOrderForEach();
+  thang.prettyPrint();
+  function disorderer(bTree) {
+    let bstSize = Math.floor(Math.random() * 10);
+    for (let i = 0; i < bstSize; i++) {
+      bTree.insert(Math.floor(Math.random() * (200 - 100 + 1)) + 100);
+    }
+  }
+  disorderer(thang);
+  thang.prettyPrint();
+  console.log(thang.isBalanced());
+  thang.rebalance();
 
-thang.prettyPrint();
-console.log(thang.includes(0));
-console.log(thang.includes(7));
-console.log(thang.includes(1));
-console.log(thang.includes(11));
-console.log(thang.includes(9));
-thang.insert(5);
-thang.insert(7);
-thang.insert(9);
-thang.insert(10);
-thang.insert(11);
-thang.insert(12);
-let insert = [591, 90909, 19414, 2525, 15152, 1515252];
-insert.forEach((element) => {
-  thang.insert(element);
-});
+  thang.prettyPrint();
+  console.log(thang.isBalanced());
+  thang.levelOrderForEach();
+  thang.preOrderForEach();
+  thang.postOrderForEach();
+  thang.inOrderForEach();
+}
 
-thang.deleteItem(4);
-thang.deleteItem(2);
-thang.deleteItem(8);
-thang.deleteItem(9);
-thang.prettyPrint();
-
-//thang.preOrderForEach();
-//thang.postOrderForEach();
-//thang.inOrderForEach();
-//thang.levelOrderForEach();
-//console.log(thang.height(6));
-thang.rebalance();
-console.log(thang.isBalanced());
-thang.prettyPrint();
-//console.log(thang.depth(10));
+testBst();
 
 //first, get the arr during creationg of the tree
 // instantly run through buildtree
