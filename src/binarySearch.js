@@ -144,11 +144,6 @@ class tree {
     }
     return null;
   }
-  isBalanced(node = this.root) {
-    let current = node;
-    let left = this.isBalanced(current.leftChild);
-    let right = this.isBalanced(current.rightChild);
-  }
 
   preOrderForEach(node = this.root) {
     if (node === null) return;
@@ -195,6 +190,19 @@ class tree {
     // remove node
     //repeat
   }
+  isBalanced(node = this.root) {
+    if (node === null || node === undefined) {
+      return true;
+    }
+
+    const left = this.nodeHeight(node.leftChild);
+
+    const right = this.nodeHeight(node.rightChild);
+    if (left > right + 1 || left + 1 < right) {
+      return false;
+    }
+    return this.isBalanced(node.leftChild) && this.isBalanced(node.rightChild);
+  }
   prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
     let current = node;
     if (current === null || current === undefined) {
@@ -215,7 +223,9 @@ class tree {
   };
 }
 
-const thang = new tree([9, 4, 9, 1, 2, 6, 8, 2, 4, 6]);
+const thang = new tree([
+  9, 4, 9, 1, 2, 6, 8, 2, 4, 6, 1, 5, 2, 6, 7, 8, 2, 35, 235195, 19,
+]);
 
 thang.prettyPrint();
 console.log(thang.includes(9));
@@ -232,6 +242,11 @@ thang.insert(9);
 thang.insert(10);
 thang.insert(11);
 thang.insert(12);
+let insert = [591, 90909, 19414, 2525, 15152, 1515252];
+insert.forEach((element) => {
+  thang.insert(element);
+});
+
 thang.deleteItem(4);
 thang.deleteItem(2);
 thang.deleteItem(8);
@@ -241,7 +256,8 @@ thang.prettyPrint();
 //thang.postOrderForEach();
 //thang.inOrderForEach();
 //thang.levelOrderForEach();
-console.log(thang.height(6));
+//console.log(thang.height(6));
+console.log(thang.isBalanced());
 //console.log(thang.depth(10));
 
 //first, get the arr during creationg of the tree
