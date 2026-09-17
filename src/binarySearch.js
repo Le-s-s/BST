@@ -221,6 +221,32 @@ class tree {
       true,
     );
   };
+  rebalance() {
+    let rNode = this.root;
+    let arr = [];
+    let returnArr = [];
+    if (rNode === null) {
+      return;
+    }
+    arr.push(rNode);
+    while (arr.length > 0) {
+      if (arr[0].leftChild !== null) {
+        arr.push(arr[0].leftChild);
+      }
+      if (arr[0].rightChild !== null) {
+        arr.push(arr[0].rightChild);
+      }
+      returnArr.push(arr[0].value);
+
+      arr.shift();
+    }
+    this.root = this.buildTree(returnArr);
+    // add node to array
+    // add node children to array
+    // print node value
+    // remove node
+    //repeat
+  }
 }
 
 const thang = new tree([
@@ -252,12 +278,15 @@ thang.deleteItem(2);
 thang.deleteItem(8);
 thang.deleteItem(9);
 thang.prettyPrint();
+
 //thang.preOrderForEach();
 //thang.postOrderForEach();
 //thang.inOrderForEach();
 //thang.levelOrderForEach();
 //console.log(thang.height(6));
+thang.rebalance();
 console.log(thang.isBalanced());
+thang.prettyPrint();
 //console.log(thang.depth(10));
 
 //first, get the arr during creationg of the tree
